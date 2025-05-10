@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feature Collection</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+        
+        :root {
+            --primary: #2E9F9F;
+            --secondary: #FF7F7F;
+            --accent: #6C63FF;
+            --background: #F5F7FA;
+            --surface: rgba(255, 255, 255, 0.9);
+            --text: #2D3748;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--background);
+            color: var(--text);
+            padding: 2rem;
+            line-height: 1.6;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .block {
+            background: var(--surface);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 1.25rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--secondary);
+        }
+
+        input, button {
+            width: 100%;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border: 1px solid #E2E8F0;
+            border-radius: 0.5rem;
+            font-family: inherit;
+            font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.6);
+            color: var(--text);
+        }
+
+        button {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: filter 0.2s;
+        }
+
+        button:hover {
+            filter: brightness(0.95);
+        }
+
+        .circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--accent);
+            margin: 1rem auto;
+            cursor: pointer;
+            border: 2px solid var(--primary);
+        }
+
+        #calculator {
+            background: var(--surface);
+            padding: 1rem;
+            border-radius: 0.75rem;
+        }
+
+        .calc-display {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 0.75rem;
+            font-size: 1.25rem;
+            text-align: right;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 0.5rem;
+            color: var(--text);
+        }
+
+        .calc-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+        }
+
+        .color-mixer {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .color-preview {
+            width: 100%;
+            height: 60px;
+            border-radius: 0.5rem;
+            border: 2px solid var(--primary);
+        }
+
+        input[type="range"] {
+            width: 100%;
+            margin: 0.5rem 0;
+            background: #E2E8F0;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            background: var(--primary);
+        }
+
+        .counter-btn {
+            background: var(--accent);
+            margin: 1rem 0;
+            color: white;
+        }
+
+        .result {
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            font-weight: 500;
+        }
+
+        @media (min-width: 1024px) {
+            .grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid">
+        <!-- Alert Buttons -->
+        <div class="block">
+            <h2>Alert Buttons</h2>
+            <button onclick="alert('Button 1 Alert!')">Alert 1</button>
+            <button onclick="alert('Button 2 Alert!')">Alert 2</button>
+        </div>
+
+        <!-- Math Operations -->
+        <div class="block">
+            <h2>Math Operations</h2>
+            <input type="number" id="num1" placeholder="Number 1">
+            <input type="number" id="num2" placeholder="Number 2">
+            <button onclick="performOperation('add')">Add</button>
+            <button onclick="performOperation('multiply')">Multiply</button>
+            <div class="result" id="mathResult"></div>
+        </div>
+
+        <!-- Even/Odd Check -->
+        <div class="block">
+            <h2>Even/Odd Check</h2>
+            <input type="number" id="evenOddInput">
+            <button onclick="checkEvenOdd()">Check</button>
+            <div class="result" id="evenOddResult"></div>
+        </div>
+
+        <!-- Voting Age Check -->
+        <div class="block">
+            <h2>Voting Age Check</h2>
+            <input type="number" id="ageInput">
+            <button onclick="checkVotingAge()">Check</button>
+            <div class="result" id="votingResult"></div>
+        </div>
+
+        <!-- Prime Numbers -->
+        <div class="block">
+            <h2>Prime Numbers</h2>
+            <input type="number" id="primeInput">
+            <button onclick="showPrimes()">Show Primes</button>
+            <div class="result" id="primeResult"></div>
+        </div>
+
+        <!-- Registration Form -->
+        <div class="block">
+            <h2>Registration Form</h2>
+            <form id="regForm" onsubmit="return handleFormSubmit(event)">
+                <input type="text" placeholder="Name" required>
+                <input type="email" placeholder="Email" required>
+                <input type="tel" placeholder="Contact" required>
+                <input type="number" placeholder="Roll No" required>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+
+        <!-- Color Changer -->
+        <div class="block">
+            <h2>Color Changer</h2>
+            <div class="circle" onclick="changeColor(this)" style="background-color: #E53E3E" data-color-index="0"></div>
+        </div>
+
+        <!-- Grade Calculator -->
+        <div class="block">
+            <h2>Grade Calculator</h2>
+            <input type="number" id="marksInput">
+            <button onclick="calculateGrade()">Calculate</button>
+            <div class="result" id="gradeResult"></div>
+        </div>
+
+        <!-- Interaction Counters -->
+        <div class="block">
+            <h2>Interaction Counters</h2>
+            <button class="counter-btn" id="counterButton">
+                Count Interactions Here
+            </button>
+            <div class="result">
+                <p>Clicks: <span id="clickCount">0</span></p>
+                <p>Double Clicks: <span id="dblClickCount">0</span></p>
+                <p>Hovers: <span id="hoverCount">0</span></p>
+            </div>
+        </div>
+
+        <!-- Color Mixer -->
+        <div class="block">
+            <h2>Color Mixer</h2>
+            <div class="color-mixer">
+                <div>
+                    <input type="range" id="red" min="0" max="255" value="128">
+                    <label for="red">Red</label>
+                </div>
+                <div>
+                    <input type="range" id="green" min="0" max="255" value="128">
+                    <label for="green">Green</label>
+                </div>
+                <div>
+                    <input type="range" id="blue" min="0" max="255" value="128">
+                    <label for="blue">Blue</label>
+                </div>
+                <div class="color-preview" id="colorPreview"></div>
+            </div>
+            <div class="result" id="colorName"></div>
+        </div>
+
+        <!-- Calculator -->
+        <div class="block" id="calculator">
+            <h2>Calculator</h2>
+            <input type="text" class="calc-display" id="display" readonly>
+            <div class="calc-buttons">
+                <button>7</button>
+                <button>8</button>
+                <button>9</button>
+                <button>+</button>
+                <button>4</button>
+                <button>5</button>
+                <button>6</button>
+                <button>-</button>
+                <button>1</button>
+                <button>2</button>
+                <button>3</button>
+                <button>×</button>
+                <button>0</button>
+                <button>.</button>
+                <button>=</button>
+                <button>/</button>
+                <button>C</button>
+                <button>(</button>
+                <button>)</button>
+                <button>^</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // All JavaScript functionality remains the same as previous version
+        // Feature 2 & 3: Math Operations
+        function performOperation(operation) {
+            const num1 = parseFloat(document.getElementById('num1').value);
+            const num2 = parseFloat(document.getElementById('num2').value);
+            let result;
+            if(operation === 'add') result = num1 + num2;
+            else result = num1 * num2;
+            document.getElementById('mathResult').textContent = `Result: ${result}`;
+        }
+
+        // Feature 4: Even/Odd Check
+        function checkEvenOdd() {
+            const number = parseInt(document.getElementById('evenOddInput').value);
+            document.getElementById('evenOddResult').textContent = 
+                number % 2 === 0 ? "Even" : "Odd";
+        }
+
+        // Feature 5: Voting Age Check
+        function checkVotingAge() {
+            const age = parseInt(document.getElementById('ageInput').value);
+            document.getElementById('votingResult').textContent = 
+                age >= 18 ? "Eligible to vote" : "Not eligible to vote";
+        }
+
+        // Feature 6: Prime Numbers
+        function isPrime(num) {
+            for(let i = 2; i <= Math.sqrt(num); i++) {
+                if(num % i === 0) return false;
+            }
+            return num > 1;
+        }
+
+        function showPrimes() {
+            const limit = parseInt(document.getElementById('primeInput').value);
+            let primes = [];
+            for(let i = 2; i <= limit; i++) {
+                if(isPrime(i)) primes.push(i);
+            }
+            document.getElementById('primeResult').textContent = primes.join(', ');
+        }
+
+        // Feature 7: Form Handling
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            alert('Form submitted successfully!');
+            event.target.reset();
+        }
+
+        // Feature 8: Color Changer
+        const colors = ['#E53E3E', '#319795', '#2D3748'];
+        function changeColor(circle) {
+            const currentIndex = parseInt(circle.getAttribute('data-color-index')) || 0;
+            const newIndex = (currentIndex + 1) % colors.length;
+            circle.style.backgroundColor = colors[newIndex];
+            circle.setAttribute('data-color-index', newIndex);
+        }
+
+        // Feature 9: Grade Calculator
+        function calculateGrade() {
+            const marks = parseInt(document.getElementById('marksInput').value);
+            let grade;
+            if(marks >= 75) grade = 'A+';
+            else if(marks >= 70) grade = 'A';
+            else if(marks >= 65) grade = 'A-';
+            else if(marks >= 60) grade = 'B+';
+            else if(marks >= 55) grade = 'B';
+            else if(marks >= 50) grade = 'B-';
+            else if(marks >= 45) grade = 'C+';
+            else if(marks >= 40) grade = 'C';
+            else if(marks >= 35) grade = 'C-';
+            else if(marks >= 30) grade = 'D';
+            else grade = 'F';
+            document.getElementById('gradeResult').textContent = `Grade: ${grade}`;
+        }
+
+        // Feature 10: Counters
+        let clickCount = 0, dblClickCount = 0, hoverCount = 0;
+        const counterButton = document.getElementById('counterButton');
+        
+        counterButton.addEventListener('click', () => {
+            document.getElementById('clickCount').textContent = ++clickCount;
+        });
+        
+        counterButton.addEventListener('dblclick', () => {
+            document.getElementById('dblClickCount').textContent = ++dblClickCount;
+        });
+        
+        counterButton.addEventListener('mouseover', () => {
+            document.getElementById('hoverCount').textContent = ++hoverCount;
+        });
+
+        // Feature 11: Color Mixer
+        const colorInputs = document.querySelectorAll('.color-mixer input');
+        const colorPreview = document.getElementById('colorPreview');
+        function updateColor() {
+            const r = document.getElementById('red').value;
+            const g = document.getElementById('green').value;
+            const b = document.getElementById('blue').value;
+            const color = `rgb(${r}, ${g}, ${b})`;
+            colorPreview.style.backgroundColor = color;
+            document.getElementById('colorName').textContent = color;
+        }
+        colorInputs.forEach(input => input.addEventListener('input', updateColor));
+        updateColor();
+
+        // Feature 12: Calculator
+        function appendToDisplay(value) {
+            document.getElementById('display').value += value;
+        }
+
+        function clearDisplay() {
+            document.getElementById('display').value = '';
+        }
+
+        function calculate() {
+            try {
+                const result = eval(document.getElementById('display').value);
+                document.getElementById('display').value = result;
+            } catch {
+                alert('Invalid calculation');
+                clearDisplay();
+            }
+        }
+
+        function calculatePower() {
+            const [base, exponent] = document.getElementById('display').value.split('^');
+            document.getElementById('display').value = Math.pow(base, exponent);
+        }
+
+        // Calculator button handlers
+        document.querySelectorAll('#calculator button').forEach(button => {
+            button.addEventListener('click', () => {
+                const value = button.textContent;
+                if(value === '=') calculate();
+                else if(value === 'C') clearDisplay();
+                else if(value === '^') calculatePower();
+                else appendToDisplay(value);
+            });
+        });
+    </script>
+</body>
+</html>
